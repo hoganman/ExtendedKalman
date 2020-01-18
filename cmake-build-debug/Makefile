@@ -123,6 +123,33 @@ ExtendedKalman/fast:
 	$(MAKE) -f CMakeFiles/ExtendedKalman.dir/build.make CMakeFiles/ExtendedKalman.dir/build
 .PHONY : ExtendedKalman/fast
 
+GravityWellPotential.o: GravityWellPotential.cpp.o
+
+.PHONY : GravityWellPotential.o
+
+# target to build an object file
+GravityWellPotential.cpp.o:
+	$(MAKE) -f CMakeFiles/ExtendedKalman.dir/build.make CMakeFiles/ExtendedKalman.dir/GravityWellPotential.cpp.o
+.PHONY : GravityWellPotential.cpp.o
+
+GravityWellPotential.i: GravityWellPotential.cpp.i
+
+.PHONY : GravityWellPotential.i
+
+# target to preprocess a source file
+GravityWellPotential.cpp.i:
+	$(MAKE) -f CMakeFiles/ExtendedKalman.dir/build.make CMakeFiles/ExtendedKalman.dir/GravityWellPotential.cpp.i
+.PHONY : GravityWellPotential.cpp.i
+
+GravityWellPotential.s: GravityWellPotential.cpp.s
+
+.PHONY : GravityWellPotential.s
+
+# target to generate assembly for a file
+GravityWellPotential.cpp.s:
+	$(MAKE) -f CMakeFiles/ExtendedKalman.dir/build.make CMakeFiles/ExtendedKalman.dir/GravityWellPotential.cpp.s
+.PHONY : GravityWellPotential.cpp.s
+
 RungeKuttaO2.o: RungeKuttaO2.cpp.o
 
 .PHONY : RungeKuttaO2.o
@@ -149,6 +176,33 @@ RungeKuttaO2.s: RungeKuttaO2.cpp.s
 RungeKuttaO2.cpp.s:
 	$(MAKE) -f CMakeFiles/ExtendedKalman.dir/build.make CMakeFiles/ExtendedKalman.dir/RungeKuttaO2.cpp.s
 .PHONY : RungeKuttaO2.cpp.s
+
+Vector2.o: Vector2.cpp.o
+
+.PHONY : Vector2.o
+
+# target to build an object file
+Vector2.cpp.o:
+	$(MAKE) -f CMakeFiles/ExtendedKalman.dir/build.make CMakeFiles/ExtendedKalman.dir/Vector2.cpp.o
+.PHONY : Vector2.cpp.o
+
+Vector2.i: Vector2.cpp.i
+
+.PHONY : Vector2.i
+
+# target to preprocess a source file
+Vector2.cpp.i:
+	$(MAKE) -f CMakeFiles/ExtendedKalman.dir/build.make CMakeFiles/ExtendedKalman.dir/Vector2.cpp.i
+.PHONY : Vector2.cpp.i
+
+Vector2.s: Vector2.cpp.s
+
+.PHONY : Vector2.s
+
+# target to generate assembly for a file
+Vector2.cpp.s:
+	$(MAKE) -f CMakeFiles/ExtendedKalman.dir/build.make CMakeFiles/ExtendedKalman.dir/Vector2.cpp.s
+.PHONY : Vector2.cpp.s
 
 main.o: main.cpp.o
 
@@ -186,9 +240,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... ExtendedKalman"
 	@echo "... edit_cache"
+	@echo "... GravityWellPotential.o"
+	@echo "... GravityWellPotential.i"
+	@echo "... GravityWellPotential.s"
 	@echo "... RungeKuttaO2.o"
 	@echo "... RungeKuttaO2.i"
 	@echo "... RungeKuttaO2.s"
+	@echo "... Vector2.o"
+	@echo "... Vector2.i"
+	@echo "... Vector2.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

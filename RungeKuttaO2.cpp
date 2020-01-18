@@ -11,7 +11,7 @@ RungeKuttaO2<T>::RungeKuttaO2() : TimeStep(0), UpdateFunction(nullptr){
 }
 
 template<class T>
-RungeKuttaO2<T>::RungeKuttaO2(RungeKuttaO2State* InitialState, RungeKuttaO2FCN *UpdateFcn, T StepSize) {
+RungeKuttaO2<T>::RungeKuttaO2(RungeKuttaO2State<T>* InitialState, RungeKuttaO2FCN<T> *UpdateFcn, T StepSize) {
 
     State = InitialState;
     UpdateFunction = UpdateFcn;

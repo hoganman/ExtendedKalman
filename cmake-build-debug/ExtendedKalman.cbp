@@ -84,10 +84,22 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/mhogan/CLionProjects/ExtendedKalman/GravityWellPotential.cpp">
+			<Option target="ExtendedKalman"/>
+		</Unit>
+		<Unit filename="/home/mhogan/CLionProjects/ExtendedKalman/GravityWellPotential.h">
+			<Option target="ExtendedKalman"/>
+		</Unit>
 		<Unit filename="/home/mhogan/CLionProjects/ExtendedKalman/RungeKuttaO2.cpp">
 			<Option target="ExtendedKalman"/>
 		</Unit>
 		<Unit filename="/home/mhogan/CLionProjects/ExtendedKalman/RungeKuttaO2.h">
+			<Option target="ExtendedKalman"/>
+		</Unit>
+		<Unit filename="/home/mhogan/CLionProjects/ExtendedKalman/Vector2.cpp">
+			<Option target="ExtendedKalman"/>
+		</Unit>
+		<Unit filename="/home/mhogan/CLionProjects/ExtendedKalman/Vector2.h">
 			<Option target="ExtendedKalman"/>
 		</Unit>
 		<Unit filename="/home/mhogan/CLionProjects/ExtendedKalman/main.cpp">

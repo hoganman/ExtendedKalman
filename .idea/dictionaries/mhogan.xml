@@ -2,6 +2,7 @@
   <dictionary name="mhogan">
     <words>
       <w>extendedkalman</w>
+      <w>gravitywellpotential</w>
       <w>kutta</w>
       <w>runge</w>
       <w>rungekuttao</w>
