@@ -39,9 +39,11 @@ RungeKuttaO2FCN<T>::RungeKuttaO2FCN() = default;
 
 
 template<class T>
-T RungeKuttaO2FCN<T>::UpdateFCN(T TimeStep, RungeKuttaO2State<T> State) {
+bool RungeKuttaO2FCN<T>::UpdateFCN(const T& TimeStep, const RungeKuttaO2State<T> &State,
+                                   RungeKuttaO2State<T>* ReturnState) {
     (void)TimeStep;
     (void)State;
+    (void*)ReturnState;
     std::cout << "WARNING: No update function have been declared for the Runge-Kutta integrator!" << std::endl;
     std::cout << "Please implement a RungeKuttaOFFCN instance!" << std::endl;
     exit(1);

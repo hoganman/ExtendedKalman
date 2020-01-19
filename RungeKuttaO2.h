@@ -6,6 +6,7 @@
 #define EXTENDEDKALMAN_RUNGEKUTTAO2_H
 
 #include <vector>
+#include "Vector2.h"
 
 template <class T> class RungeKuttaO2;
 template <class T> class RungeKuttaO2FCN;
@@ -46,7 +47,7 @@ public:
 
     virtual ~RungeKuttaO2FCN() = default;
 
-    virtual T UpdateFCN(T TimeStep, RungeKuttaO2State<T> State);
+    virtual bool UpdateFCN(const T& TimeStep, const RungeKuttaO2State<T> &State, RungeKuttaO2State<T>* UpdatedState);
 };
 
 
@@ -63,16 +64,16 @@ public:
 
     T GetTime() const {return Time;}
 
-    T GetPosition() const {return Position;}
+    Vector2<T> GetPosition() const {return Position;}
 
-    T GetVelocity() const {return Velocity;}
+    Vector2<T> GetVelocity() const {return Velocity;}
 protected:
 
     T Time;
 
-    T Position;
+    Vector2<T> Position;
 
-    T Velocity;
+    Vector2<T> Velocity;
 };
 
 
