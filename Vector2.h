@@ -15,19 +15,19 @@ public:
 
     Vector2(T x, T y);
 
-    explicit Vector2(std::vector<T> vec) {Elements = vec;}
+    explicit Vector2(std::vector<T> vec);
 
     explicit Vector2(T* arr);
 
-    virtual ~Vector2();
+    virtual ~Vector2() = default;
 
-    T GetX() const {return Elements.at(0);}
+    T GetX() const {return X;}
 
-    T GetY() const {return Elements.at(1);}
+    T GetY() const {return Y;}
 
     T GetMag2() const;
 
-    T GetMag() const {return std::sqrt(GetMag2());}
+    T GetMag(const double &power=1) const;
 
     Vector2<T>& operator=(const Vector2<T>& arg);
 
@@ -35,9 +35,9 @@ public:
 
     Vector2<T>& operator+(Vector2<T>& arg);
 
-protected:
+    T X;
 
-    std::vector<T> Elements;
+    T Y;
 
 };
 

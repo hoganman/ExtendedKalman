@@ -22,6 +22,25 @@ protected:
 
 };
 
+
+template <class T> class RocketState : public RungeKuttaO2State<T> {
+
+    RocketState();
+
+    RocketState(RungeKuttaO2State<T> State, Vector2<T> RocketDir);
+
+    RocketState(Vector2<T> y0, Vector2<T> yprime0, Vector2<T> RocketDir);
+
+    Vector2<T> GetRocketDirection() const {return RocketDirection;}
+
+protected:
+
+    Vector2<T> RocketDirection;
+
+    //T ExhaustVelocity;
+
+};
+
 template <class T> class GravityWellPotentialXDir : public GravityWellPotential<T> {
 
 public:
@@ -30,8 +49,7 @@ public:
 
     explicit GravityWellPotentialXDir(T RocketMass) : GravityWellPotential<T>(RocketMass){}
 
-    bool UpdateFCN(const T& TimeStep, const RungeKuttaO2State<T> &State, RungeKuttaO2State<T>* ReturnState);
-
+    bool UpdateFCN(const T& TimeStep, const RocketState<T> &State, RocketState<T>* ReturnState);
 
 };
 
@@ -47,6 +65,9 @@ namespace PhysicalConstants
 
     //Units kg
     const double kEarthMass = 5.9722E24;
+
+    //Units km
+    const double kMoonSemiMajorAxis = 384399;
 
 }
 

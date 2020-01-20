@@ -56,7 +56,7 @@ RungeKuttaO2State<T>::RungeKuttaO2State() : Time(0), Position(0), Velocity(0){
 }
 
 template<class T>
-RungeKuttaO2State<T>::RungeKuttaO2State(T y0, T yprime0, T t0) {
+RungeKuttaO2State<T>::RungeKuttaO2State(Vector2<T> y0, Vector2<T> yprime0, T t0) {
 
     Position = y0;
     Velocity = yprime0;
@@ -70,3 +70,4 @@ RungeKuttaO2State<T>::RungeKuttaO2State(const RungeKuttaO2State<T> &copy) {
    copy.Velocity = Velocity;
    copy.Position = Position;
 }
+

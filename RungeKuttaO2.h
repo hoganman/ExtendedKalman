@@ -58,7 +58,7 @@ public:
 
     RungeKuttaO2State(const RungeKuttaO2State<T>& copy);
 
-    RungeKuttaO2State(T y0, T yprime0, T t0=0);
+    RungeKuttaO2State(Vector2<T> y0, Vector2<T> yprime0, T t0=0);
 
     virtual ~RungeKuttaO2State() = default;
 
@@ -67,6 +67,7 @@ public:
     Vector2<T> GetPosition() const {return Position;}
 
     Vector2<T> GetVelocity() const {return Velocity;}
+
 protected:
 
     T Time;
