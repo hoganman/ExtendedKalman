@@ -10,7 +10,7 @@
 
 template <class T> class RungeKuttaO2;
 template <class T> class RungeKuttaO2FCN;
-template <class T> class RungeKuttaO2State;
+template <class T> class UpdateEquations;
 
 template <class T> class RungeKuttaO2 {
 
@@ -21,22 +21,9 @@ public:
 
     virtual ~RungeKuttaO2()= default;
 
-    //constructor which takes the initial state, update function, and step size
-    RungeKuttaO2(RungeKuttaO2State<T>* InitialState, RungeKuttaO2FCN<T>* UpdateFcn, T StepSize);
+    UpdateEquations<T>* EquationsOfMotion;
 
-    //Progresses the state forward
-    bool Update();
-
-    bool GetState(RungeKuttaO2State<T>* ReturnState);
-
-protected:
-
-    //Initial state of the system
-    RungeKuttaO2State<T>* State;
-
-    RungeKuttaO2FCN<T>* UpdateFunction;
-
-    T TimeStep;
+    int NEquations;
 };
 
 template <class T> class RungeKuttaO2FCN {
@@ -45,36 +32,36 @@ public:
 
     RungeKuttaO2FCN();
 
+    explicit RungeKuttaO2FCN(T DeltaT);
+
     virtual ~RungeKuttaO2FCN() = default;
 
-    virtual bool UpdateFCN(const T& TimeStep, const RungeKuttaO2State<T> &State, RungeKuttaO2State<T>* UpdatedState);
+    T GetTimeStep() const {return TimeStep;}
+
+    T TimeStep;
+
 };
 
+template <class T> class UpdateEquations {
 
-template <class T> class RungeKuttaO2State {
 public:
 
-    RungeKuttaO2State();
+    UpdateEquations();
 
-    RungeKuttaO2State(const RungeKuttaO2State<T>& copy);
+    explicit UpdateEquations(T DeltaT);
 
-    RungeKuttaO2State(Vector2<T> y0, Vector2<T> yprime0, T t0=0);
+    virtual ~UpdateEquations();
 
-    virtual ~RungeKuttaO2State() = default;
+    bool AddEquation(RungeKuttaO2FCN<T>* eqn);
 
-    T GetTime() const {return Time;}
+    [[nodiscard]] int GetNEquations() const {return NEquation;}
 
-    Vector2<T> GetPosition() const {return Position;}
+    std::vector< RungeKuttaO2FCN<T>* > Equations;
 
-    Vector2<T> GetVelocity() const {return Velocity;}
+    int NEquation;
 
-protected:
+    T TimeStep;
 
-    T Time;
-
-    Vector2<T> Position;
-
-    Vector2<T> Velocity;
 };
 
 

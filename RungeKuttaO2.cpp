@@ -6,68 +6,42 @@
 #include "RungeKuttaO2.h"
 
 template<class T>
-RungeKuttaO2<T>::RungeKuttaO2() : TimeStep(0), UpdateFunction(nullptr){
-    State = std::vector<T>(0);
+RungeKuttaO2<T>::RungeKuttaO2() : EquationsOfMotion(nullptr), NEquations(0){
 }
 
-template<class T>
-RungeKuttaO2<T>::RungeKuttaO2(RungeKuttaO2State<T>* InitialState, RungeKuttaO2FCN<T> *UpdateFcn, T StepSize) {
-
-    State = InitialState;
-    UpdateFunction = UpdateFcn;
-    TimeStep = StepSize;
-
-}
-
-template<class T>
-bool RungeKuttaO2<T>::Update() {
-
-    //T k1, k2;
-    //k1 = TimeStep * UpdateFunction(State);
-    return false;
-}
-
-template<class T>
-bool RungeKuttaO2<T>::GetState(RungeKuttaO2State<T> *ReturnState) {
-    ReturnState = new RungeKuttaO2State<T> (State);
-    (void*)ReturnState;
-    return true;
-}
 
 template<class T>
 RungeKuttaO2FCN<T>::RungeKuttaO2FCN() = default;
 
 
 template<class T>
-bool RungeKuttaO2FCN<T>::UpdateFCN(const T& TimeStep, const RungeKuttaO2State<T> &State,
-                                   RungeKuttaO2State<T>* ReturnState) {
-    (void)TimeStep;
-    (void)State;
-    (void*)ReturnState;
-    std::cout << "WARNING: No update function have been declared for the Runge-Kutta integrator!" << std::endl;
-    std::cout << "Please implement a RungeKuttaOFFCN instance!" << std::endl;
-    exit(1);
-    //return RungeKuttaO2State<T>();
+RungeKuttaO2FCN<T>::RungeKuttaO2FCN(T DeltaT) {
+    TimeStep = DeltaT;
+}
+
+
+template<class T>
+bool UpdateEquations<T>::AddEquation(RungeKuttaO2FCN<T>* eqn) {
+    if( !eqn )
+        return false;
+    Equations.push_back(eqn);
+    NEquation = Equations.size();
+    return true;
 }
 
 template<class T>
-RungeKuttaO2State<T>::RungeKuttaO2State() : Time(0), Position(0), Velocity(0){
+UpdateEquations<T>::~UpdateEquations() {
+
+    for(unsigned int i = 0; i < Equations.size(); ++i){
+        if (Equations.at(i))
+            delete Equations.at(i);
+    }
+    Equations.clear();
 
 }
 
 template<class T>
-RungeKuttaO2State<T>::RungeKuttaO2State(Vector2<T> y0, Vector2<T> yprime0, T t0) {
-
-    Position = y0;
-    Velocity = yprime0;
-    Time = t0;
-
-}
+UpdateEquations<T>::UpdateEquations() : NEquation(0), TimeStep(0) {}
 
 template<class T>
-RungeKuttaO2State<T>::RungeKuttaO2State(const RungeKuttaO2State<T> &copy) {
-   copy.Time = Time;
-   copy.Velocity = Velocity;
-   copy.Position = Position;
-}
-
+UpdateEquations<T>::UpdateEquations(T DeltaT) : NEquation(0) {TimeStep = DeltaT;}
