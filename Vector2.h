@@ -41,5 +41,7 @@ public:
 
 };
 
+template class Vector2<double>;
+template class Vector2<float>;
 
 #endif //EXTENDEDKALMAN_VECTOR2_H

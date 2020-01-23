@@ -1,7 +1,3 @@
-//
-// Created by mhogan on 1/17/20.
-//
-
 #ifndef EXTENDEDKALMAN_RUNGEKUTTAO2_H
 #define EXTENDEDKALMAN_RUNGEKUTTAO2_H
 
@@ -23,8 +19,10 @@ public:
 
     UpdateEquations<T>* EquationsOfMotion;
 
-    int NEquations;
 };
+
+template class RungeKuttaO2<double>;
+template class RungeKuttaO2<float>;
 
 template <class T> class RungeKuttaO2FCN {
 
@@ -42,6 +40,9 @@ public:
 
 };
 
+template class RungeKuttaO2FCN<float>;
+template class RungeKuttaO2FCN<double>;
+
 template <class T> class UpdateEquations {
 
 public:
@@ -50,13 +51,9 @@ public:
 
     explicit UpdateEquations(T DeltaT);
 
-    virtual ~UpdateEquations();
-
-    bool AddEquation(RungeKuttaO2FCN<T>* eqn);
+    virtual ~UpdateEquations() = default;
 
     [[nodiscard]] int GetNEquations() const {return NEquation;}
-
-    std::vector< RungeKuttaO2FCN<T>* > Equations;
 
     int NEquation;
 
@@ -64,5 +61,7 @@ public:
 
 };
 
+template class UpdateEquations<double>;
+template class UpdateEquations<float>;
 
 #endif //EXTENDEDKALMAN_RUNGEKUTTAO2_H
