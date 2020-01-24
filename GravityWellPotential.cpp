@@ -23,23 +23,6 @@ RocketState<T>::RocketState(const RocketState<T>& copy){
 }
 
 template<class T>
-bool GravityWellPotential<T>::Update(const RocketState<T> &State, RocketState<T> *UpdatedState) {
-    (void)State;
-    (void*)UpdatedState;
-    std::cout << "ERROR: No Update function has been defined!" << std::endl;
-    std::cout << "Implement an Update function" << std::endl;
-    exit(1);
-}
-
-template<class T>
-T GravityWellPotential<T>::UpdateFCN(const RocketState<T> &State) {
-    (void)State;
-    std::cout << "ERROR: No Update function has been defined!" << std::endl;
-    std::cout << "Implement an Update function" << std::endl;
-    exit(1);
-}
-
-template<class T>
 T GravityWellPotentialXPos<T>::UpdateFCN(const RocketState<T> &State) {
 
     return State.GetVelocity().X;
@@ -69,7 +52,9 @@ T GravityWellPotentialXVel<T>::UpdateFCN(const RocketState<T> &State) {
     Vector2<T> Delta_R = Prev_Position - RMoon;
     T Acceleration_1 = kGravitation * kMoonMass * Delta_R.X / Delta_R.GetMag(3);
     T Acceleration_2 = kGravitation * kEarthMass * Prev_Position.X / Prev_Position.GetMag(3);
-    T Acceleration = -1 * (Acceleration_1 + Acceleration_2);
+    std::cout << "kGravitation * kMoonMass * Prev_Position.X = " << kGravitation * kMoonMass * Delta_R.X << std::endl;
+    std::cout << "Acceleration_2 = " << Acceleration_2 << std::endl;
+    T Acceleration = -1.0 * (Acceleration_1 + Acceleration_2);
     return Acceleration;
 
 }
@@ -79,10 +64,13 @@ bool
 GravityWellPotentialXVel<T>::Update(const RocketState<T> &State, RocketState<T>* UpdatedState) {
     RocketState<T> dummy(State);
     T k1 = this->TimeStep * UpdateFCN(dummy);
+    std::cout << "k1 = " << k1 << std::endl;
     dummy.Velocity.X += 0.5 * k1;
     dummy.Time += 0.5 * this->TimeStep;
     T k2 = this->TimeStep * UpdateFCN(dummy);
+    std::cout << "k2 = " << k2 << std::endl;
     UpdatedState->Velocity.X += k2;
+    std::cout << State.Velocity.X << " ||| " << UpdatedState->Velocity.X << std::endl;
     return true;
 }
 
@@ -134,37 +122,21 @@ GravityWellPotentialYVel<T>::Update(const RocketState<T> &State, RocketState<T>*
 template<class T>
 RocketUpdateEquations<T>::~RocketUpdateEquations() {
 
-    for(unsigned int i = 0; i < Equations.size(); ++i){
-        if (Equations.at(i))
-            delete Equations.at(i);
-    }
-    Equations.clear();
+    delete XPosODE;
+    delete XVelODE;
+    delete YPosODE;
+    delete YVelODE;
 
-}
-
-template<class T>
-bool RocketUpdateEquations<T>::AddEquation(GravityWellPotential<T>* eqn) {
-    if( !eqn )
-        return false;
-    Equations.push_back(eqn);
-    this->NEquation = Equations.size();
-    return true;
 }
 
 template<class T>
 RocketUpdateEquations<T>::RocketUpdateEquations(T DeltaT, RocketState<T> InputState) : UpdateEquations<T>(DeltaT) {
 
     State = InputState;
-
-    auto* XPosition = new GravityWellPotentialXPos<T>(DeltaT);
-    auto* XVelocity = new GravityWellPotentialXVel<T>(DeltaT);
-    auto* YPosition = new GravityWellPotentialYPos<T>(DeltaT);
-    auto* YVelocity = new GravityWellPotentialYVel<T>(DeltaT);
-
-    AddEquation(XPosition);
-    AddEquation(XVelocity);
-    AddEquation(YPosition);
-    AddEquation(YVelocity);
+    XPosODE = new GravityWellPotentialXPos<T>(DeltaT);
+    XVelODE = new GravityWellPotentialXVel<T>(DeltaT);
+    YPosODE = new GravityWellPotentialYPos<T>(DeltaT);
+    YVelODE = new GravityWellPotentialYVel<T>(DeltaT);
 
 }
 
@@ -179,10 +151,16 @@ template<class T>
 bool RocketInEarthMoonSystem<T>::Update() {
 
     auto* UpdatedState = new RocketState<T>(CoupledODEs.State);
-    for(int index = 0; index < CoupledODEs.NEquations; ++index){
-        GravityWellPotential<T>* ode = static_cast< GravityWellPotential<T>* >(CoupledODEs.Equations.at(index));
-        ode->Update(CoupledODEs.State, UpdatedState);
-    }
+    RocketState<T> InitialState(CoupledODEs.State);
+
+    CoupledODEs.XVelODE->Update(InitialState, UpdatedState);
+    //std::cout << InitialState.Velocity.X << " | " << UpdatedState->Velocity.X << std::endl;
+    CoupledODEs.YVelODE->Update(InitialState, UpdatedState);
+    CoupledODEs.XPosODE->Update(InitialState, UpdatedState);
+    CoupledODEs.YPosODE->Update(InitialState, UpdatedState);
+
     CoupledODEs.State = RocketState<T>(*UpdatedState);
+    delete UpdatedState;
+    CoupledODEs.State.Time += CoupledODEs.TimeStep;
     return true;
 }

@@ -13,9 +13,9 @@ public:
 
     RocketState(const RocketState<T>& copy);
 
-    Vector2<T> GetPosition() const {return Position;}
+    [[nodiscard]] Vector2<T> GetPosition() const {return Position;}
 
-    Vector2<T> GetVelocity() const {return Velocity;}
+    [[nodiscard]] Vector2<T> GetVelocity() const {return Velocity;}
 
     Vector2<T> Position;
 
@@ -36,13 +36,9 @@ public:
 
     GravityWellPotential() : RungeKuttaO2FCN<T>(){}
 
-    virtual ~GravityWellPotential<T>() = default;
+    ~GravityWellPotential<T>() override = default;
 
     explicit GravityWellPotential(T DeltaT) : RungeKuttaO2FCN<T>(DeltaT){}
-
-    virtual bool Update(const RocketState<T> &State, RocketState<T>* UpdatedState);
-
-    virtual T UpdateFCN(const RocketState<T> &State);
 
 };
 
@@ -57,7 +53,7 @@ public:
 
     explicit GravityWellPotentialXPos(T DeltaT) : GravityWellPotential<T>(DeltaT){}
 
-    virtual ~GravityWellPotentialXPos() = default;
+    ~GravityWellPotentialXPos() override = default;
 
     bool Update(const RocketState<T> &State, RocketState<T>* UpdatedState);
 
@@ -75,7 +71,7 @@ public:
 
     explicit GravityWellPotentialXVel(T DeltaT) : GravityWellPotential<T>(DeltaT){}
 
-    virtual ~GravityWellPotentialXVel() = default;
+    ~GravityWellPotentialXVel() override = default;
 
     bool Update(const RocketState<T> &State, RocketState<T>* UpdatedState);
 
@@ -94,7 +90,7 @@ public:
 
     explicit GravityWellPotentialYPos(T DeltaT) : GravityWellPotential<T>(DeltaT){}
 
-    virtual ~GravityWellPotentialYPos() = default;
+    ~GravityWellPotentialYPos() override = default;
 
     bool Update(const RocketState<T> &State, RocketState<T>* UpdatedState);
 
@@ -112,7 +108,7 @@ public:
 
     explicit GravityWellPotentialYVel(T DeltaT) : GravityWellPotential<T>(DeltaT){}
 
-    virtual ~GravityWellPotentialYVel() = default;
+    ~GravityWellPotentialYVel() override = default;
 
     bool Update(const RocketState<T> &State, RocketState<T>* UpdatedState);
 
@@ -129,13 +125,17 @@ public:
 
     RocketUpdateEquations(T DeltaT, RocketState<T> InputState);
 
-    virtual ~RocketUpdateEquations();
-
-    bool AddEquation(GravityWellPotential<T>* eqn);
-
-    std::vector< RungeKuttaO2FCN<T>* > Equations;
+    ~RocketUpdateEquations() override;
 
     RocketState<T> State;
+
+    GravityWellPotentialXPos<T>* XPosODE;
+
+    GravityWellPotentialYPos<T>* YPosODE;
+
+    GravityWellPotentialXVel<T>* XVelODE;
+
+    GravityWellPotentialYVel<T>* YVelODE;
 
     enum KinematicId {
         XPosition = 0,
@@ -147,8 +147,6 @@ public:
 
 };
 
-template class std::vector< RungeKuttaO2FCN<float>* >;
-template class std::vector< RungeKuttaO2FCN<double>* >;
 template class RocketUpdateEquations<double>;
 template class RocketUpdateEquations<float>;
 
@@ -162,7 +160,7 @@ public:
 
     bool Update();
 
-    RocketState<T> GetState() const {return CoupledODEs.State;}
+    [[nodiscard]] RocketState<T> GetState() const {return CoupledODEs.State;}
 
     RocketUpdateEquations<T> CoupledODEs;
 };
