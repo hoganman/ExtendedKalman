@@ -29,6 +29,12 @@ public:
 
     T GetMag(const double &power=1) const;
 
+    T GetTheta() const {return atan2(Y, X);}
+
+    T GetInnerProduct(const Vector2<T>& vec) const {return X * vec.X + Y * vec.Y;}
+
+    T GetAngle(const Vector2<T>& vec);
+
     Vector2<T>& operator=(const Vector2<T>& arg);
 
     Vector2<T>& operator-(Vector2<T>& arg);

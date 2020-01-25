@@ -3,6 +3,7 @@
 
 #include "RungeKuttaO2.h"
 #include "Vector2.h"
+#include <math.h>
 
 template <class T> class RocketState {
 
@@ -171,20 +172,37 @@ template class RocketInEarthMoonSystem<float>;
 namespace PhysicalConstants
 {
 
-    //Units meter^3 kg^(-1) sec^(-2)
-    const double kGravitation = 6.67430E-11;
+    const double meter = 1.0;
 
-    //Units kg
-    const double kMoonMass = 7.342E22;
+    const double kilo = 1E3;
 
-    //Units kg
-    const double kEarthMass = 5.9722E24;
+    const double gram = 1E-3;
 
-    //Units m
-    const double kEarthRadius = 6378.1E3;
+    const double second = 1.0;
 
-    //Units m
-    const double kMoonSemiMajorAxis = 384399.E3;
+    const double minute = 60 * second;
+
+    const double hour = 60 * minute;
+
+    const double day = 24 * hour;
+
+    const double year = 365.24 * day;
+
+    const double kilogram = kilo * gram;
+
+    const double kilometer = kilo * meter;
+
+    const double kGravitation = 6.67430E-11 * meter * meter * meter / kilogram / second / second;
+
+    const double kMoonMass = 7.342E22 * kilogram;
+
+    const double kEarthMass = 5.9722E24 * kilogram;
+
+    const double kEarthRadius = 6371.0 * kilometer;
+
+    const double kMoonSemiMajorAxis = 384399 * kilometer;
+
+    const double kMoonRadius = 1737.4 * kilometer;
 
 }
 

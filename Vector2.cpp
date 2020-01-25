@@ -73,4 +73,9 @@ T Vector2<T>::GetMag(const double &power) const {
     return pow(mag2, power * 0.5);
 }
 
+template<class T>
+T Vector2<T>::GetAngle(const Vector2<T> &vec) {
+    return acos(this->GetInnerProduct(vec) / this->GetMag() / vec.GetMag());
+}
+
 

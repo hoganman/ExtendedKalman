@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "GravityWellPotential.h"
+#define DEBUG(x) printf("%s = %f\n", #x, x);
 
 template<class T>
 RocketState<T>::RocketState(T InitialMass, Vector2<T> InitialPosition, Vector2<T> InitialVelocity, T t0){
@@ -47,14 +48,12 @@ template<class T>
 T GravityWellPotentialXVel<T>::UpdateFCN(const RocketState<T> &State) {
 
     using namespace PhysicalConstants;
-    Vector2<T> RMoon(0.0,kMoonSemiMajorAxis);
     Vector2<T> Prev_Position = State.GetPosition();
+    Vector2<T> RMoon(0.0, kMoonSemiMajorAxis);
     Vector2<T> Delta_R = Prev_Position - RMoon;
-    T Acceleration_1 = kGravitation * kMoonMass * Delta_R.X / Delta_R.GetMag(3);
-    T Acceleration_2 = kGravitation * kEarthMass * Prev_Position.X / Prev_Position.GetMag(3);
-    std::cout << "kGravitation * kMoonMass * Prev_Position.X = " << kGravitation * kMoonMass * Delta_R.X << std::endl;
-    std::cout << "Acceleration_2 = " << Acceleration_2 << std::endl;
-    T Acceleration = -1.0 * (Acceleration_1 + Acceleration_2);
+    T Acceleration_1 = 0.0;//- kGravitation * kMoonMass * Delta_R.X / Delta_R.GetMag(3);
+    T Acceleration_2 = - kGravitation * kEarthMass * cos(Prev_Position.GetTheta()) / Prev_Position.GetMag2();
+    T Acceleration = Acceleration_1 + Acceleration_2;
     return Acceleration;
 
 }
@@ -64,13 +63,10 @@ bool
 GravityWellPotentialXVel<T>::Update(const RocketState<T> &State, RocketState<T>* UpdatedState) {
     RocketState<T> dummy(State);
     T k1 = this->TimeStep * UpdateFCN(dummy);
-    std::cout << "k1 = " << k1 << std::endl;
     dummy.Velocity.X += 0.5 * k1;
     dummy.Time += 0.5 * this->TimeStep;
     T k2 = this->TimeStep * UpdateFCN(dummy);
-    std::cout << "k2 = " << k2 << std::endl;
     UpdatedState->Velocity.X += k2;
-    std::cout << State.Velocity.X << " ||| " << UpdatedState->Velocity.X << std::endl;
     return true;
 }
 
@@ -98,12 +94,12 @@ template<class T>
 T GravityWellPotentialYVel<T>::UpdateFCN(const RocketState<T> &State) {
 
     using namespace PhysicalConstants;
-    Vector2<T> RMoon(0.0,kMoonSemiMajorAxis);
     Vector2<T> Prev_Position = State.GetPosition();
+    Vector2<T> RMoon(0.0, kMoonSemiMajorAxis);
     Vector2<T> Delta_R = Prev_Position - RMoon;
-    T Acceleration_1 = kGravitation * kMoonMass * Delta_R.Y / Delta_R.GetMag(3);
-    T Acceleration_2 = kGravitation * kEarthMass * Prev_Position.Y / Prev_Position.GetMag(3);
-    T Acceleration = -1 * (Acceleration_1 + Acceleration_2);
+    T Acceleration_1 = 0.;//- kGravitation * kMoonMass * Delta_R.Y / Delta_R.GetMag(3);
+    T Acceleration_2 = - kGravitation * kEarthMass * sin(Prev_Position.GetTheta()) / Prev_Position.GetMag2();
+    T Acceleration = Acceleration_1 + Acceleration_2;
     return Acceleration;
 }
 
@@ -154,7 +150,6 @@ bool RocketInEarthMoonSystem<T>::Update() {
     RocketState<T> InitialState(CoupledODEs.State);
 
     CoupledODEs.XVelODE->Update(InitialState, UpdatedState);
-    //std::cout << InitialState.Velocity.X << " | " << UpdatedState->Velocity.X << std::endl;
     CoupledODEs.YVelODE->Update(InitialState, UpdatedState);
     CoupledODEs.XPosODE->Update(InitialState, UpdatedState);
     CoupledODEs.YPosODE->Update(InitialState, UpdatedState);
